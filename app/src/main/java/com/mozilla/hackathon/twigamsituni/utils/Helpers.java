@@ -35,12 +35,14 @@ public class Helpers {
 
         //Get list of all packages
         List<PackageInfo> packages = mPm.getInstalledPackages(PackageManager.GET_META_DATA);
-        
+
         // Loop through all installed packages to get a list of used permissions and PackageInfos
         for (PackageInfo pi : packages) {
             // Do not add System Packages
             if ((pi.requestedPermissions == null || pi.packageName.equals("android")) ||(pi.applicationInfo != null && (pi.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0))
                 continue;
+
+            Log.d(TAG+">>>",pi.packageName);
 
             if(pi.packageName.equals(app_name)){
                 for (String permission : pi.requestedPermissions) {
