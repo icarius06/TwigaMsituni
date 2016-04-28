@@ -26,39 +26,32 @@ public class Helpers {
      * @return ArrayList<String> permissions
      */
     public static ArrayList<Map<String,String>> getAppPermissions(String app_name, Context context){
+        PackageManager mPm = context.getPackageManager();
+        List<PackageInfo> packages = mPm.getInstalledPackages(PackageManager.GET_PERMISSIONS);
+
         final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
         ArrayList<Map<String,String>> permissions = new ArrayList();
 
-        PackageManager mPm = context.getPackageManager();
-
-        //Get list of all packages
-        List<PackageInfo> packages = mPm.getInstalledPackages(PackageManager.GET_META_DATA);
-
-        // Loop through all installed packages to get a list of used permissions and PackageInfos
-        for (PackageInfo pi : packages) {
-            // Do not add System Packages
-            if ((pi.requestedPermissions == null || pi.packageName.equals("android")) ||(pi.applicationInfo != null && (pi.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0))
+        for(PackageInfo pi:packages) {
+            if (pi.requestedPermissions == null || pi.packageName.contains("com.android"))
                 continue;
-
-            Log.d(TAG+">>>",pi.packageName);
-
-            if(pi.packageName.equals(app_name)){
-                for (String permission : pi.requestedPermissions) {
-                    Map<String, String> curChildMap = new HashMap<String, String>();
-                    try {
-                        PermissionInfo pinfo = mPm.getPermissionInfo(permission, PackageManager.GET_META_DATA);
-                        CharSequence label = pinfo.loadLabel(mPm);
-                        CharSequence desc = pinfo.loadDescription(mPm);
-                        curChildMap.put(label.toString(),desc.toString());
-                        permissions.add(curChildMap);
-                    } catch (PackageManager.NameNotFoundException e) {
-                        Log.i(TAG, "Ignoring unknown permission " + permission);
-                        continue;
+                if (pi.packageName.contains(app_name)) {
+                    Map<String, String> curChildMap = new HashMap();
+                    for (String permission : pi.requestedPermissions) {
+                        try{
+                            PermissionInfo pinfo = mPm.getPermissionInfo(permission, PackageManager.GET_PERMISSIONS);
+                            if(pinfo.loadDescription(mPm)!=null) {
+                                curChildMap.put(pinfo.name, pinfo.loadDescription(mPm).toString());
+                                permissions.add(curChildMap);
+                            }
+                        } catch (PackageManager.NameNotFoundException e) {
+                            Log.i("TAG", "Ignoring unknown permission " + permission);
+                            continue;
+                        }
                     }
                 }
-            }
         }
 
         return permissions;
