@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/pop_up_margin_top"
+    tools:context="com.mozilla.hackathon.twigamsituni.activities.OverLayActivity"
+    android:windowBackground="@android:color/transparent"
+    android:windowIsTranslucent="true"
+    android:windowAnimationStyle="@android:style/Animation.Translucent">
+    <LinearLayout
+        android:padding="@dimen/activity_horizontal_margin"
+        android:background="@color/button_material_dark"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/close"
+            android:background="@android:drawable/ic_menu_close_clear_cancel"
+            android:layout_gravity="end"
+            android:layout_width="36dp"
+            android:layout_height="36dp" />
+        <TextView
+            android:id="@+id/activity_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+</RelativeLayout>
