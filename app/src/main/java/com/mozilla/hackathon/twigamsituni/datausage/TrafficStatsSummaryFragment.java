@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.appyvet.rangebar.RangeBar;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -47,9 +48,13 @@ public class TrafficStatsSummaryFragment extends Fragment implements OnChartValu
     private float initialHeaderSize;
     @Bind(R.id.stats_summary)
     PieChart mChart;
+    @Bind(R.id.time_range)
+    RangeBar rangeBar;
     Typeface tf;
     private long rx,tx;
     private float rate=0.30f;
+    private int range=10;
+
 
     public TrafficStatsSummaryFragment() {
         // Required empty public constructor
@@ -72,6 +77,45 @@ public class TrafficStatsSummaryFragment extends Fragment implements OnChartValu
         if (getArguments() != null) {
         }
     }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_traffic_stats_summary, container, false);
+        ButterKnife.bind(this, view);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+
+        dataSummaryAdapter = new DataSummaryAdapter(getActivity());
+        recyclerView.setAdapter(dataSummaryAdapter);
+        initialHeaderSize = getResources().getDimension(R.dimen.header_height);
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (layoutManager.findFirstVisibleItemPosition() > 0) {
+                    reactToScroll((int) -initialHeaderSize);
+                } else {
+                    reactToScroll(layoutManager.getChildAt(0).getTop());
+                }
+
+            }
+        });
+        rangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
+            @Override
+            public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
+
+            }
+        });
+        rangeBar.setTickEnd(range);
+
+        return view;
+    }
+
 
     private void createCharts() {
         mChart.setUsePercentValues(true);
@@ -176,35 +220,6 @@ public class TrafficStatsSummaryFragment extends Fragment implements OnChartValu
         mChart.invalidate();
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_traffic_stats_summary, container, false);
-        ButterKnife.bind(this, view);
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-
-        dataSummaryAdapter = new DataSummaryAdapter(getActivity());
-        recyclerView.setAdapter(dataSummaryAdapter);
-        initialHeaderSize = getResources().getDimension(R.dimen.header_height);
-        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                if (layoutManager.findFirstVisibleItemPosition() > 0) {
-                    reactToScroll((int) -initialHeaderSize);
-                } else {
-                    reactToScroll(layoutManager.getChildAt(0).getTop());
-                }
-
-            }
-        });
-        return view;
-    }
-
     private void reactToScroll(int position) {
 
         if (-position >= initialHeaderSize) {
@@ -242,6 +257,7 @@ public class TrafficStatsSummaryFragment extends Fragment implements OnChartValu
         super.onResume();
         loadAppData();
         createCharts();
+        rangeBar.setSeekPinByIndex(range);
     }
 
     private void createDummyData() {

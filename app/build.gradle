@@ -37,4 +37,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
+    compile 'com.appyvet:materialrangebar:1.3'
 }

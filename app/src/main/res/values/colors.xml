@@ -2,4 +2,6 @@
 <resources>
     <color name="primary_color">#e6ffff</color>
     <color name="app_white">#FFFFFF</color>
+    <color name="range_bar_connecting">#cccccc</color>
+
 </resources>
