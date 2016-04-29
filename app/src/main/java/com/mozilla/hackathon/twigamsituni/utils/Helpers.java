@@ -36,7 +36,6 @@ public class Helpers {
 
         ArrayList<Map<String,String>> permissions = new ArrayList();
 
-
         for(PackageInfo pi:packages) {
             if (pi.requestedPermissions == null || pi.packageName.contains("com.android"))
                 continue;
