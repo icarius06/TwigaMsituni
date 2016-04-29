@@ -2,32 +2,46 @@
 <items version="2" >
 
     <item
-        jar="/Volumes/Eagle Eye/apps/gitRepo/TwigaMsituni/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
-        <dex dex="/Volumes/Eagle Eye/apps/gitRepo/TwigaMsituni/app/build/intermediates/pre-dexed/debug/classes-c0bf0c4db0cb0742cde0faee42ee6c8620012f20.jar" />
-    </item>
-    <item
-        jar="/Volumes/Eagle Eye/apps/gitRepo/TwigaMsituni/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
-        <dex dex="/Volumes/Eagle Eye/apps/gitRepo/TwigaMsituni/app/build/intermediates/pre-dexed/debug/classes-a0ccbc7e81d562b334e8848b5a76005f24415e4a.jar" />
-    </item>
-    <item
-        jar="/Volumes/Eagle Eye/apps/gitRepo/TwigaMsituni/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/libs/internal_impl-22.2.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
+        jar="/Volumes/Eagle Eye/apps/gitRepo/TwigaMsituni/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/libs/internal_impl-22.2.0.jar"
+        jumboMode="true"
+        revision="23.0.2"
         sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
-        <dex dex="/Volumes/Eagle Eye/apps/gitRepo/TwigaMsituni/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-245d7b6e22a0784c70d9caa3a9d662f3bee94458.jar" />
+        <dex dex="/Volumes/Eagle Eye/apps/gitRepo/TwigaMsituni/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0_37c29590f270dc6b0c683e3c31c02050d5020071.jar" />
+    </item>
+    <item
+        jar="/Volumes/Eagle Eye/apps/gitRepo/TwigaMsituni/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="80810c1e4ada6e36e0e28945c6d647e14cfbad51">
+        <dex dex="/Volumes/Eagle Eye/apps/gitRepo/TwigaMsituni/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_e646f234071d0931c027e55bfd35b8fb53272696.jar" />
     </item>
     <item
         jar="/Users/patrickmunene/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
+        jumboMode="true"
+        revision="23.0.2"
         sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
-        <dex dex="/Volumes/Eagle Eye/apps/gitRepo/TwigaMsituni/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-45c6b0ecd786009d02fba79f1e1099c12fff890e.jar" />
+        <dex dex="/Volumes/Eagle Eye/apps/gitRepo/TwigaMsituni/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.0_45c6b0ecd786009d02fba79f1e1099c12fff890e.jar" />
+    </item>
+    <item
+        jar="/Volumes/Eagle Eye/apps/gitRepo/TwigaMsituni/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="/Volumes/Eagle Eye/apps/gitRepo/TwigaMsituni/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-22.2.0_d55160c3c0078aa478d765547b9b1fc45dc1e03a.jar" />
+    </item>
+    <item
+        jar="/Volumes/Eagle Eye/apps/gitRepo/TwigaMsituni/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
+        <dex dex="/Volumes/Eagle Eye/apps/gitRepo/TwigaMsituni/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-22.2.0_59070fc15524a06fb03b952acf9c0a0360a4a23b.jar" />
+    </item>
+    <item
+        jar="/Volumes/Eagle Eye/apps/gitRepo/TwigaMsituni/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="0e572d5a8a09a62e0615fa0aaa256adc845797bc">
+        <dex dex="/Volumes/Eagle Eye/apps/gitRepo/TwigaMsituni/app/build/intermediates/pre-dexed/debug/instant-run_ee3eca6d3050bcf8657c2242c5f33d1dc6b2f557.jar" />
     </item>
 
 </items>
