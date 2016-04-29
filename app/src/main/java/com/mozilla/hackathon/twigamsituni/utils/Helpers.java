@@ -29,14 +29,12 @@ public class Helpers {
         PackageManager mPm = context.getPackageManager();
         List<PackageInfo> packages = mPm.getInstalledPackages(PackageManager.GET_PERMISSIONS);
 
-        final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-
         ArrayList<Map<String,String>> permissions = new ArrayList();
 
         for(PackageInfo pi:packages) {
             if (pi.requestedPermissions == null || pi.packageName.contains("com.android"))
                 continue;
+                
                 if (pi.packageName.contains(app_name)) {
                     Map<String, String> curChildMap = new HashMap();
                     for (String permission : pi.requestedPermissions) {

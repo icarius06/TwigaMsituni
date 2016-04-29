@@ -17,7 +17,6 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         TextView textView = (TextView)findViewById(R.id.first);
 
-
         textView.setText(String.valueOf(Helpers.getAppPermissions("com.mozilla.hackathon.twigamsituni",this)));
     }
 
