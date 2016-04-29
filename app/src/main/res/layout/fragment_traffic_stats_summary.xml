@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.mozilla.hackathon.twigamsituni.datausage.TrafficStatsSummaryActivity">
+    tools:context="com.mozilla.hackathon.twigamsituni.datausage.TrafficStatsSummaryActivity"
+    android:background="@color/app_white">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/traffic_stats_recycler"
@@ -25,5 +26,12 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/header_height"
         android:background="@color/primary_color"
-        android:orientation="vertical"></LinearLayout>
+        android:orientation="vertical">
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/stats_summary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </LinearLayout>
 </FrameLayout>

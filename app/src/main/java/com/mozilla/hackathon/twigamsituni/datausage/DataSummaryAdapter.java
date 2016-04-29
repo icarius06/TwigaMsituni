@@ -5,12 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mozilla.hackathon.twigamsituni.R;
-import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -28,6 +26,7 @@ public class DataSummaryAdapter extends RecyclerView.Adapter<DataSummaryAdapter.
     private List<DataRecord> dataRecordList = new LinkedList();
 
     private Context context;
+    private boolean isTotalCostMode = true;
 
 
     public DataSummaryAdapter(Context context) {
@@ -75,16 +74,14 @@ public class DataSummaryAdapter extends RecyclerView.Adapter<DataSummaryAdapter.
     }
 
 
-
-
     @Override
     public DataSummaryAdapter.SuperViewHolder onCreateViewHolder(ViewGroup parent,
-                                                             int viewType) {
+                                                                 int viewType) {
 
 
         if (viewType == VIEW_TYPE_HEADER_PLACEHOLDER) {
             View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.data_stats_item, parent, false);
+                    .inflate(R.layout.traffic_stats_header, parent, false);
 
             HeaderViewHolder vh = new HeaderViewHolder(v);
             return vh;
@@ -106,23 +103,38 @@ public class DataSummaryAdapter extends RecyclerView.Adapter<DataSummaryAdapter.
             return;
         }
 
-        DataSummaryViewHolder viewHolder = (DataSummaryViewHolder) holder;
+        final DataSummaryViewHolder viewHolder = (DataSummaryViewHolder) holder;
 
-        final DataRecord  dataRecord = dataRecordList.get(position - 1);
+        final DataRecord dataRecord = dataRecordList.get(position - 1);
 
-        float amount = Float.parseFloat(dataRecord.costPerMb);
 
         NumberFormat formatter = NumberFormat.getNumberInstance();
         formatter.setMaximumFractionDigits(2);
         formatter.setMinimumFractionDigits(2);
 
-        viewHolder.costPerMb.setText(formatter.format(amount));
+        if (isTotalCostMode) {
+            viewHolder.costPerMb.setText(context.getString(R.string.cost_per_mb, formatter.format(Float.parseFloat(dataRecord.costPerMb))));
+        } else {
+            viewHolder.costPerMb.setText(context.getString(R.string.cost_per_mb, formatter.format(dataRecord.rate)));
+        }
 
-        viewHolder.data.setText(dataRecord.usage);
+        viewHolder.data.setText(context.getString(R.string.data_usage, dataRecord.usage));
 
         viewHolder.appName.setText(dataRecord.appName);
 
-        Picasso.with(context).load(R.drawable.icon_placeholder).into(viewHolder.appIcon);
+        viewHolder.appIcon.setImageDrawable(dataRecord.icon);
+
+        viewHolder.costPerMb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isTotalCostMode) {
+                    isTotalCostMode = false;
+                } else {
+                    isTotalCostMode = true;
+                }
+                notifyDataSetChanged();
+            }
+        });
 
     }
 

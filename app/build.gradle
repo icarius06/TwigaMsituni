@@ -1,5 +1,13 @@
 apply plugin: 'com.android.application'
 
+buildscript{
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+}
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
@@ -28,4 +36,5 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
 }

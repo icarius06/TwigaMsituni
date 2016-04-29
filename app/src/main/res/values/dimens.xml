@@ -5,5 +5,4 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="margin_right">10dip</dimen>
     <dimen name="header_height">200dip</dimen>
-    header_height
 </resources>
