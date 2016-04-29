@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.mozilla.hackathon.twigamsituni.domain.Session;
 import com.mozilla.hackathon.twigamsituni.utils.Helpers;
 
 public class MainActivity extends ActionBarActivity {
@@ -14,10 +15,12 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Session session = (Session)getApplication();
+        session.setInstalledPackages(getPackageManager().getInstalledPackages(PackageManager.GET_PERMISSIONS));
+
         setContentView(R.layout.activity_main);
         TextView textView = (TextView)findViewById(R.id.first);
-
-        textView.setText(String.valueOf(Helpers.getAppPermissions("com.mozilla.hackathon.twigamsituni",this)));
+        textView.setText(String.valueOf(Helpers.getAppPermissions("com.olx.olx",this)));
     }
 
     @Override
