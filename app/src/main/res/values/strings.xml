@@ -20,6 +20,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="data">Data</string>
-    <string name="cost_per_mb">KSH %1$s</string>
+    <string name="cost_per_mb"> %1$s KES</string>
     <string name="data_usage">%1$s MB</string>
+    <string name="data_usage_rate"> %1$s KES per MB</string>
 </resources>

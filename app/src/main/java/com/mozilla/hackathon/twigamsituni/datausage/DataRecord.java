@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
  */
 public class DataRecord {
 
+    public int uid;
     public String appName;
     public String usage;
     public Drawable icon;

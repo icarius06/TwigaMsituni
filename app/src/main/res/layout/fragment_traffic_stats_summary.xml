@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/app_white"
     android:fitsSystemWindows="true"
-    tools:context="com.mozilla.hackathon.twigamsituni.datausage.TrafficStatsSummaryActivity"
-    android:background="@color/app_white">
+    tools:context="com.mozilla.hackathon.twigamsituni.datausage.TrafficStatsSummaryActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/traffic_stats_recycler"
@@ -14,13 +14,6 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_input_add" />
 
     <LinearLayout
         android:id="@+id/header"
@@ -29,31 +22,83 @@
         android:background="@color/primary_color"
         android:orientation="vertical">
 
-        <com.github.mikephil.charting.charts.PieChart
+        <lecho.lib.hellocharts.view.LineChartView
             android:id="@+id/stats_summary"
             android:layout_width="match_parent"
             android:layout_height="150dip"
-            />
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"/>
 
         <com.appyvet.rangebar.RangeBar
             android:id="@+id/time_range"
             android:layout_width="match_parent"
-            android:layout_height="40dip"
+            android:layout_height="60dip"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="5dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            custom:barWeight="2dp"
             custom:connectingLineColor="@color/range_bar_connecting"
             custom:connectingLineWeight="2dp"
-            custom:tickHeight="0dp"
-            custom:pinRadius="5dp"
+            custom:pinColor="@color/app_white"
+            custom:pinRadius="10dp"
             custom:rangeBar="false"
-            custom:selectorColor="@color/app_white"
+            custom:selectorColor="@color/primary_color"
             custom:selectorSize="15dp"
-            custom:barWeight="2dp"
-            custom:tickStart="0"
-            custom:tickInterval="1"
             custom:tickEnd="100"
-            android:layout_gravity="center_horizontal"/>
+            custom:tickHeight="2dp"
+            custom:tickInterval="1"
+            custom:tickStart="0" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.33 Per MB"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/computed_rate"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:id="@+id/enter_rate"
+                android:visibility="gone">
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="100"
+                    android:id="@+id/data_size"
+                    android:inputType="number"
+                    android:background="@color/app_white"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="MB at KES"
+                    android:id="@+id/mb_at_kes"/>
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="100"
+                    android:id="@+id/data_cost"
+                    android:inputType="number"
+
+                    android:background="@color/app_white"/>
+            </LinearLayout>
+        </FrameLayout>
     </LinearLayout>
+
+
 </FrameLayout>

@@ -118,7 +118,7 @@ public class DataSummaryAdapter extends RecyclerView.Adapter<DataSummaryAdapter.
             viewHolder.costPerMb.setText(context.getString(R.string.cost_per_mb, formatter.format(dataRecord.rate)));
         }
 
-        viewHolder.data.setText(context.getString(R.string.data_usage, dataRecord.usage));
+        viewHolder.data.setText(dataRecord.usage);
 
         viewHolder.appName.setText(dataRecord.appName);
 

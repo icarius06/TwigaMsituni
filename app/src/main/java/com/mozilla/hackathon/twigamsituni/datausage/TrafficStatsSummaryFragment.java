@@ -2,10 +2,8 @@ package com.mozilla.hackathon.twigamsituni.datausage;
 
 import android.app.Activity;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.net.TrafficStats;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,30 +12,39 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.appyvet.rangebar.RangeBar;
-import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.mozilla.hackathon.twigamsituni.R;
+import com.mozilla.hackathon.twigamsituni.Utils;
+import com.mozilla.hackathon.twigamsituni.datausage.datausage.persist.DataOperation;
+import com.mozilla.hackathon.twigamsituni.datausage.datausage.persist.DeviceData;
+import com.mozilla.hackathon.twigamsituni.datausage.datausage.persist.TrafficRecordUpdateReceiver;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
+import butterknife.OnClick;
+import lecho.lib.hellocharts.gesture.ContainerScrollType;
+import lecho.lib.hellocharts.gesture.ZoomType;
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.util.ChartUtils;
+import lecho.lib.hellocharts.view.LineChartView;
 
 public class TrafficStatsSummaryFragment extends Fragment implements OnChartValueSelectedListener {
 
@@ -47,14 +54,24 @@ public class TrafficStatsSummaryFragment extends Fragment implements OnChartValu
     public LinearLayout headerBottom;
     private float initialHeaderSize;
     @Bind(R.id.stats_summary)
-    PieChart mChart;
+    LineChartView mChart;
     @Bind(R.id.time_range)
     RangeBar rangeBar;
+    @Bind(R.id.data_size)
+    EditText dataSize;
+    @Bind(R.id.data_cost)
+    EditText dataCost;
+    @Bind(R.id.enter_rate)
+    LinearLayout enterDataView;
+    @Bind(R.id.computed_rate)
+    TextView computedRate;
     Typeface tf;
-    private long rx,tx;
-    private float rate=0.30f;
-    private int range=10;
-
+    private long rx, tx;
+    private float rate = 0.30f;
+    private int range = 10;
+    private List<DeviceData> dataRecords;
+    private int cost;
+    private int volume;
 
     public TrafficStatsSummaryFragment() {
         // Required empty public constructor
@@ -112,113 +129,30 @@ public class TrafficStatsSummaryFragment extends Fragment implements OnChartValu
             }
         });
         rangeBar.setTickEnd(range);
-
+        createCharts();
+        dataSize.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (textView.getText() != null) {
+                    String value = textView.getText().toString();
+                    volume = Integer.valueOf(value);
+                }
+                return false;
+            }
+        });
+        dataCost.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (textView.getText() != null) {
+                    String value = textView.getText().toString();
+                    cost = Integer.valueOf(value);
+                }
+                return false;
+            }
+        });
         return view;
     }
 
-
-    private void createCharts() {
-        mChart.setUsePercentValues(true);
-        mChart.setDescription("");
-        mChart.setExtraOffsets(5, 10, 5, 5);
-
-        mChart.setDragDecelerationFrictionCoef(0.95f);
-
-
-        mChart.setCenterTextTypeface(Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Light.ttf"));
-        mChart.setCenterText(getString(R.string.data));
-
-        mChart.setDrawHoleEnabled(true);
-        mChart.setHoleColor(Color.WHITE);
-
-        mChart.setTransparentCircleColor(Color.WHITE);
-        mChart.setTransparentCircleAlpha(110);
-
-        mChart.setHoleRadius(58f);
-        mChart.setTransparentCircleRadius(61f);
-        tf = Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Regular.ttf");
-        mChart.setDrawCenterText(true);
-
-        mChart.setRotationAngle(0);
-        // enable rotation of the chart by touch
-        mChart.setRotationEnabled(true);
-        mChart.setHighlightPerTapEnabled(true);
-
-        // mChart.setUnit(" €");
-        // mChart.setDrawUnitsInChart(true);
-
-        // add a selection listener
-        mChart.setOnChartValueSelectedListener(this);
-
-        setData(2, 100);
-
-        mChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
-        // mChart.spin(2000, 0, 360);
-
-        Legend l = mChart.getLegend();
-        l.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);
-        l.setXEntrySpace(7f);
-        l.setYEntrySpace(0f);
-        l.setYOffset(0f);
-    }
-
-    private void setData(int count, float range) {
-
-        float mult = range;
-
-        ArrayList<Entry> yVals1 = new ArrayList<Entry>();
-
-        // IMPORTANT: In a PieChart, no values (Entry) should have the same
-        // xIndex (even if from different DataSets), since no values can be
-        // drawn above each other.
-        yVals1.add(new Entry(TrafficStats.getTotalRxBytes(), 0));
-        yVals1.add(new Entry(TrafficStats.getTotalTxBytes(), 1));
-
-        ArrayList<String> xVals = new ArrayList<String>();
-
-        for (int i = 0; i < count + 1; i++)
-            xVals.add(mParties[i % mParties.length]);
-
-        PieDataSet dataSet = new PieDataSet(yVals1, getString(R.string.data));
-        dataSet.setSliceSpace(3f);
-        dataSet.setSelectionShift(5f);
-
-        // add a lot of colors
-
-        ArrayList<Integer> colors = new ArrayList<Integer>();
-
-        for (int c : ColorTemplate.VORDIPLOM_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.JOYFUL_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.COLORFUL_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.LIBERTY_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.PASTEL_COLORS)
-            colors.add(c);
-
-        colors.add(ColorTemplate.getHoloBlue());
-
-        dataSet.setColors(colors);
-        //dataSet.setSelectionShift(0f);
-
-        PieData data = new PieData(xVals, dataSet);
-        data.setValueFormatter(new PercentFormatter());
-        data.setValueTextSize(11f);
-        data.setValueTextColor(Color.WHITE);
-        data.setValueTypeface(tf);
-        mChart.setData(data);
-
-        // undo all highlights
-        mChart.highlightValues(null);
-
-        mChart.invalidate();
-    }
 
     private void reactToScroll(int position) {
 
@@ -256,8 +190,37 @@ public class TrafficStatsSummaryFragment extends Fragment implements OnChartValu
     public void onResume() {
         super.onResume();
         loadAppData();
-        createCharts();
         rangeBar.setSeekPinByIndex(range);
+    }
+
+    private void createCharts() {
+        mChart.setInteractive(false);
+        mChart.setZoomType(ZoomType.HORIZONTAL_AND_VERTICAL);
+        mChart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
+
+        //In most cased you can call data model methods in builder-pattern-like manner.
+        Line line = new Line(showDeviceDataSummary());
+
+        line.setColor(ChartUtils.COLORS[0]);
+        line.setHasLabels(true);
+        line.setHasLines(true);
+        //line.setHasPoints(true);
+
+        List<Line> lines = new ArrayList<Line>();
+        lines.add(line);
+
+        LineChartData data = new LineChartData();
+        data.setLines(lines);
+        Axis axisX = new Axis();
+        Axis axisY = new Axis().setHasLines(true);
+
+        axisX.setName("TIME");
+        axisY.setName("VOLUME (DATA)");
+
+        data.setAxisXBottom(axisX);
+        data.setAxisYLeft(axisY);
+        data.setBaseValue(Float.NEGATIVE_INFINITY);
+        mChart.setLineChartData(data);
     }
 
     private void createDummyData() {
@@ -307,21 +270,58 @@ public class TrafficStatsSummaryFragment extends Fragment implements OnChartValu
 
     }
 
-    private void loadAppData(){
-        List<DataRecord>dataRecords=new ArrayList<DataRecord>();
+    private void loadAppData() {
+        List<DataRecord> dataRecords = new ArrayList<DataRecord>();
         for (ApplicationInfo app :
                 getActivity().getPackageManager().getInstalledApplications(0)) {
-            DataRecord dataRecord=new DataRecord();
-            dataRecord.usage=String.valueOf(TrafficStats.getUidTxBytes(app.uid));
-            dataRecord.costPerMb=String.valueOf(TrafficStats.getUidTxBytes(app.uid)*rate);
-            dataRecord.appName= (String) app.loadLabel(getActivity().getPackageManager());
-            dataRecord.icon=app.loadIcon(getActivity().getPackageManager());
-            dataRecord.rate=rate;
-            dataRecords.add(dataRecord);
+            DataRecord dataRecord = new DataRecord();
+            DataRecord usage = DataOperation.getAppTrafficById(app.uid, 0);
+            String dataUsage = usage.usage;
+            //if (Long.valueOf(dataUsage) > 0)
+            {
+                dataRecord.usage = Utils.humanReadableByteCount(Long.valueOf(dataUsage), true);
+                dataRecord.costPerMb = String.valueOf(Utils.bytesToMeg(Long.valueOf(dataUsage)) * rate);
+                dataRecord.appName = (String) app.loadLabel(getActivity().getPackageManager());
+                dataRecord.icon = app.loadIcon(getActivity().getPackageManager());
+                dataRecord.rate = rate;
+                dataRecords.add(dataRecord);
+            }
         }
         dataSummaryAdapter.setDataRecordList(dataRecords);
         dataSummaryAdapter.notifyDataSetChanged();
+        TrafficRecordUpdateReceiver alarm = new TrafficRecordUpdateReceiver();
+        alarm.setAlarm(getContext());
     }
 
+    private List<PointValue> showDeviceDataSummary() {
+        dataRecords = DataOperation.getDeviceData(0);
 
+        List<PointValue> values = new ArrayList<PointValue>();
+
+        for (int i = 0; i < dataRecords.size(); i++) {
+            DeviceData dataRecord = dataRecords.get(i);
+            //values.add(new PointValue(i, i*2));
+        }
+        return values;
+    }
+
+    @OnClick({R.id.computed_rate, R.id.mb_at_kes})
+    public void handleClicks(View v) {
+        switch (v.getId()) {
+            case R.id.computed_rate: {
+                enterDataView.setVisibility(View.VISIBLE);
+                computedRate.setVisibility(View.GONE);
+                break;
+            }
+            case R.id.mb_at_kes: {
+                enterDataView.setVisibility(View.GONE);
+                computedRate.setVisibility(View.VISIBLE);
+                cost=cost==0?100:cost;
+                volume=volume==0?30:volume;
+                rate=cost/volume;
+                computedRate.setText(getString(R.string.data_usage_rate,rate));
+                break;
+            }
+        }
+    }
 }
